@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  smart-custom-api:
+    build: .
+    ports:
+      - "8001:8001"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - API_PORT=8001
+      - API_HOST=0.0.0.0
+      - LOG_LEVEL=INFO
+      - DEBUG=False
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
